@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+ <head>
+  <meta charset="utf-8"/>
+  <script type="application/javascript">
+    function draw() {
+      var canvas = document.getElementById("canvas");
+      if (canvas.getContext) {
+        var ctx = canvas.getContext("2d");
+
+        //Draw Face
+        ctx.beginPath();
+        ctx.arc(100,100,100,0,2*Math.PI);
+        ctx.stroke();
+
+        //Draw Eyes
+        ctx.beginPath();
+        ctx.arc(70,70,10,0,2*Math.PI);
+        ctx.stroke();
+
+        ctx.beginPath();
+        ctx.arc(130,70,10,0,2*Math.PI);
+        ctx.stroke();
+
+        //Draw Mouth
+        ctx.beginPath();
+        ctx.arc(100,100,70,0,Math.PI);
+        ctx.stroke();
+      }
+    }
+  </script>
+ </head>
+ <body onload="draw();">
+   <canvas id="canvas" width="200" height="200"></canvas>
+ </body>
+</html>

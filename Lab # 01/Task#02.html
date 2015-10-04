@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+ <head>
+  <meta charset="utf-8"/>
+  <script type="application/javascript">
+    function draw() {
+      var canvas = document.getElementById("canvas");
+      if (canvas.getContext) {
+        var ctx = canvas.getContext("2d");
+
+        //Top Triangle
+        ctx.beginPath();
+        ctx.moveTo(180, 0);
+        ctx.lineTo(0, 180);
+        ctx.lineTo(0, 0);
+        ctx.closePath();
+
+        //Fill it with Black color
+        ctx.fillStyle = "#000000";
+        ctx.fill();
+
+        //Lower Triangle
+        ctx.beginPath();
+        ctx.moveTo(200, 20);
+        ctx.lineTo(200, 200);
+        ctx.lineTo(20, 200);
+        ctx.closePath();
+
+        ctx.stroke();
+      }
+    }
+  </script>
+ </head>
+ <body onload="draw();">
+   <canvas id="canvas" width="200" height="200"></canvas>
+ </body>
+</html>
