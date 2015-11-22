@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Draw a Point</title>
+    <script type="text/javascript" src="../lib/dat.gui.min.js"></script>
+  </head>
+ 
+  <body onload="main()">
+    <canvas id="webgl" width="256" height="256">
+    Please use a browser that supports "canvas"
+    </canvas>
+	
+	<script id="vertex-shader" type="x-shader/x-vertex">		
+		attribute vec4 a_Position;
+		//attribute vec4 a_Color;
+
+		attribute vec4 ka_Color;
+		attribute vec4 kd_Color;
+		attribute vec4 ks_Color;
+
+		attribute float a_nShiney;
+
+		varying vec4 colorOut;
+		uniform mat4 u_mMatrix;					// Required for transforming the vertex position back to world space so the direction of light can be calculated
+		uniform mat4 u_mvMatrix;
+		uniform mat4 u_pMatrix;
+		uniform mat4 u_nMatrix;
+		attribute vec4 a_normal;
+		uniform vec3 u_LightPos;
+		uniform vec3 u_LightColor;
+		uniform vec3 u_AmbientLight;
+
+		uniform vec3 u_ViewerPos;
+		uniform int u_shadingType;
+
+		varying vec3 v_normal;
+		varying vec4 v_vertexPos;
+		varying float v_nShiney;
+
+		varying vec4 v_ka_Color;
+		varying vec4 v_kd_Color;
+		varying vec4 v_ks_Color;
+
+		void
+		main()
+		{
+			gl_Position = u_pMatrix * u_mvMatrix * a_Position;
+
+			vec4 transformedNormal = u_nMatrix * a_normal;
+			vec4 vertexPosition = u_mMatrix * a_Position; // get vertex pos in worldspace by multiplying pos with model Matrix
+			vec3 normal = normalize(transformedNormal.xyz);	// transformating normals accourding to model view matrix
+			
+			//If Goroud Shading
+			if(u_shadingType == 1)
+			{
+				vec3 lightDir = normalize(u_LightPos - vec3(vertexPosition));
+				vec3 viewerDir = normalize(u_ViewerPos - vec3(vertexPosition));
+
+				float nl = max(dot(normal, lightDir), 0.0);
+
+			    vec3 R = normalize((2.0 * nl) * normal - lightDir);
+			    
+				float vr = max(dot(viewerDir, R), 0.0);
+
+			    //Calculate the reflections
+			    vec3 specular = u_LightColor * ks_Color.rgb * pow(vr, a_nShiney);
+				vec3 diffuse = u_LightColor * kd_Color.rgb * nl;
+			    vec3 ambient = u_AmbientLight * ka_Color.rgb;
+
+			    colorOut = vec4(ambient + diffuse + specular, ka_Color.a);
+			}
+			//For phong illumination
+			else
+			{
+				v_normal = normal;
+				v_vertexPos = vertexPosition;
+				v_nShiney = a_nShiney;
+
+				v_ka_Color = ka_Color;
+				v_kd_Color = kd_Color;
+				v_ks_Color = ks_Color;
+			}
+		}
+	</script>
+
+	<script id="fragment-shader" type="x-shader/x-fragment">
+		precision mediump float;
+		varying vec4 colorOut;
+
+		uniform int u_shadingTypeFS;
+
+		uniform vec3 u_ViewerPosFS;
+		uniform vec3 u_LightPosFS;
+		uniform vec3 u_LightColorFS;
+		uniform vec3 u_AmbientLightFS;
+
+		varying vec4 v_ka_Color;
+		varying vec4 v_kd_Color;
+		varying vec4 v_ks_Color;
+
+		varying vec3 v_normal;
+		varying vec4 v_vertexPos;
+		varying float v_nShiney;
+
+		void
+		main()
+		{
+			//If Goroud Shading
+			if(u_shadingTypeFS == 1)
+			{
+		    	gl_FragColor = colorOut;	
+			}
+			//If Phong Illumination
+			else
+			{
+				vec3 normal = normalize(v_normal);
+
+				vec3 lightDir = normalize(u_LightPosFS - vec3(v_vertexPos));
+				vec3 viewerDir = normalize(u_ViewerPosFS - vec3(v_vertexPos));
+
+				float nl = max(dot(normal, lightDir), 0.0);
+
+			    vec3 R = normalize((2.0 * nl) * normal - lightDir);
+				float vr = max(dot(viewerDir, R), 0.0);
+
+			    //Calculate the reflections
+			    vec3 specular = u_LightColorFS * v_ks_Color.rgb * pow(vr, v_nShiney);
+				vec3 diffuse = u_LightColorFS * v_kd_Color.rgb * nl;
+			    vec3 ambient = u_AmbientLightFS * v_ka_Color.rgb;
+
+			    gl_FragColor = vec4(ambient + diffuse + specular, v_ka_Color.a);
+			}
+		    
+		}
+	</script>
+	  
+    <script src="../lib/webgl-utils.js"></script>
+    <script src="../lib/webgl-debug.js"></script>
+    <script src="../lib/cuon-utils.js"></script>
+	<script src="../lib/initShaders.js"></script>
+	<script src="../lib/flatten.js"></script>
+	<script src="../lib/gl-matrix-min.js"></script>
+	<script src="../lib/modelVewMatrixStack.js"></script>
+    <script src="Task02.js"></script>
+  </body>
+</html>

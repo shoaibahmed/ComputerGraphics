@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Space Fighter</title>
+    <script type="text/javascript" src="../lib/dat.gui.min.js"></script>
+  </head>
+ 
+  <body onload="main()">
+    <canvas id="webgl" width="500" height="500" style="border:5px solid #000000;">
+    Please use a browser that supports "canvas"
+    </canvas>
+
+    <br/><h1><b>Score: <span id="finalScore"></b></h1>
+	
+	<script id="vertex-shader" type="x-shader/x-vertex">		
+		attribute vec4 a_Position;
+		attribute vec4 vertexColor;
+
+		uniform mat4 transformationMatrix;
+		varying vec4 u_FragColor;
+
+		void
+		main()
+		{
+		    gl_Position = transformationMatrix * a_Position;
+		    u_FragColor = vertexColor;
+		}
+	</script>
+
+	<script id="fragment-shader" type="x-shader/x-fragment">
+		precision mediump float;
+
+		varying vec4 u_FragColor;
+		void
+		main()
+		{
+		    gl_FragColor = u_FragColor;
+		}
+	</script>
+	  
+    <script src="../lib/webgl-utils.js"></script>
+    <script src="../lib/webgl-debug.js"></script>
+    <script src="../lib/cuon-utils.js"></script>
+	<script src="../lib/initShaders.js"></script>
+	<script src="../lib/flatten.js"></script>
+	<script src="../lib/gl-matrix-min.js"></script>
+	<script src="../lib/modelVewMatrixStack.js"></script>
+    <script src="Task02.js"></script>
+  </body>
+</html>
