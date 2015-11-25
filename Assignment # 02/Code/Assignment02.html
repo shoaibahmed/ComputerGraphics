@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html>
+
+    <head>
+        <title>Solar System</title>
+        <meta http-equiv="content-type" content="text/html; charset=ISO-8859-1">
+
+        <script src="../lib/webgl-utils.js"></script>
+        <script src="../lib/webgl-debug.js"></script>
+        <script src="../lib/cuon-utils.js"></script>
+        <script src="../lib/gl-matrix-min.js"></script>
+        <script src="../lib/modelVewMatrixStack.js"></script>
+        <script type="text/javascript" src="../lib/dat.gui.min.js"></script>
+        <script src="Assignment02.js"></script>
+
+        <script id="shader-fs" type="x-shader/x-fragment">
+            precision mediump float;
+
+            varying vec2 vTextureCoord;
+
+            uniform sampler2D uSunSampler;
+            uniform sampler2D uMercurySampler;
+            uniform sampler2D uVenusSampler;
+            uniform sampler2D uEarthSampler;
+            uniform sampler2D uMoonSampler;
+            uniform sampler2D uMarsSampler;
+            uniform sampler2D uJupiterSampler;
+            uniform sampler2D uSaturnSampler;
+            uniform sampler2D uUranusSampler;
+            uniform sampler2D uNeptuneSampler;
+            uniform sampler2D uPlutoSampler;
+
+            uniform int uSamplerSelector;
+
+            void main() 
+            {
+                //If Sun is selected
+                if(uSamplerSelector == 1)
+                {
+                    gl_FragColor = texture2D(uSunSampler, vTextureCoord);
+                }
+
+                //If Mercury is selected
+                else if(uSamplerSelector == 2)
+                {
+                    gl_FragColor = texture2D(uMercurySampler, vTextureCoord);    
+                }
+
+                //If Venus is selected
+                else if(uSamplerSelector == 3)
+                {
+                    gl_FragColor = texture2D(uVenusSampler, vTextureCoord);    
+                }
+
+                //If Earth is selected
+                else if(uSamplerSelector == 4)
+                {
+                    gl_FragColor = texture2D(uEarthSampler, vTextureCoord);    
+                }
+
+                //If Mars is selected
+                else if(uSamplerSelector == 5)
+                {
+                    gl_FragColor = texture2D(uMarsSampler, vTextureCoord);    
+                }
+
+                //If Jupiter is selected
+                else if(uSamplerSelector == 6)
+                {
+                    gl_FragColor = texture2D(uJupiterSampler, vTextureCoord);    
+                }
+
+                //If Saturn is selected
+                else if(uSamplerSelector == 7)
+                {
+                    gl_FragColor = texture2D(uSaturnSampler, vTextureCoord);    
+                }
+
+                //If Uranus is selected
+                else if(uSamplerSelector == 8)
+                {
+                    gl_FragColor = texture2D(uUranusSampler, vTextureCoord);    
+                }
+
+                //If Neptune is selected
+                else if(uSamplerSelector == 9)
+                {
+                    gl_FragColor = texture2D(uNeptuneSampler, vTextureCoord);    
+                }
+
+                //If Pluto is selected
+                else if(uSamplerSelector == 10)
+                {
+                    gl_FragColor = texture2D(uPlutoSampler, vTextureCoord);    
+                }
+
+                //Assign white color is any other texture is specified
+                else
+                {
+                    gl_FragColor = vec4(0.5, 0.5, 0.5, 1.0);
+                }
+            }
+        </script>
+
+        <script id="shader-vs" type="x-shader/x-vertex">
+            attribute vec3 aVertexPosition;
+            attribute vec2 aTextureCoord;
+
+            uniform mat4 uMVMatrix;
+            uniform mat4 uPMatrix;
+
+            varying vec2 vTextureCoord;
+
+            void main() 
+            {
+                gl_Position = uPMatrix * uMVMatrix * vec4(aVertexPosition, 1.0);
+                vTextureCoord = aTextureCoord;
+            }
+        </script>
+
+        <style>
+            canvas 
+            {
+                padding-left: 0;
+                padding-right: 0;
+                margin-left: auto;
+                margin-right: auto;
+                display: block;
+            }
+        </style>
+
+    </head>
+
+
+    <body onload="main();">
+        <canvas id="webgl" style="border: none;" width="800" height="600">
+                Please use a browser that supports "canvas"
+        </canvas>
+
+        <h3>
+            Use W, A, S, and D to move around the scene. R and F are used to rotate the camera vertically.
+            You can use Q and E to rotate camera on its origin. <br/>
+            You can manually change planet and user control parameters from the contols tab on top right corner of the screen.
+        </h3>
+
+        The simulation has been designed taking into consideration the original attributes of planets like their size, distance from sun, and period of rotation around their own axis as well as around the sun.
+        To find more about these planets, visit the link: <a href="http://www.enchantedlearning.com/subjects/astronomy/planets/"> Planets </a>
+    </body>
+
+</html>
