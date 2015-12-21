@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Draw a Point</title>
+  </head>
+ 
+  <body onload="main()">
+    <canvas id="webgl" width="256" height="256" style="border:5px solid #000000;">
+    Please use a browser that supports "canvas"
+    </canvas>
+	
+	<script id="vertex-shader" type="x-shader/x-vertex">		
+		attribute vec4 a_Position;
+		void
+		main()
+		{
+		    gl_Position = a_Position;
+		    gl_PointSize = 1.0;
+		}
+	</script>
+
+	<script id="fragment-shader" type="x-shader/x-fragment">
+		precision mediump float;
+		void
+		main()
+		{
+		    gl_FragColor = vec4(1.0, 0.0, 0.0, 1.0);
+		}
+	</script>
+	  
+    <script src="../lib/webgl-utils.js"></script>
+    <script src="../lib/webgl-debug.js"></script>
+    <script src="../lib/cuon-utils.js"></script>
+	<script src="../lib/initShaders.js"></script>
+	<script src="../lib/flatten.js"></script>
+	<script src="../lib/gl-matrix-min.js"></script>
+	<script src="../lib/modelVewMatrixStack.js"></script>
+    <script src="Task02.js"></script>
+  </body>
+</html>
