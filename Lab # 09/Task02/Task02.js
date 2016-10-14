@@ -3,6 +3,9 @@ var y1 = 0;
 
 var r = 0;
 
+var displacementX = 0;
+var displacementY = 0;
+
 points = [];
 
 var rect;
@@ -48,6 +51,12 @@ function click(ev, gl, canvas, program, isMouseDown) {
 	{
 		r = Math.sqrt(Math.pow(x - x1, 2.0) + Math.pow(y - y1, 2.0));
 		console.log("Radius: " + r);
+
+		var oneSideWidth = myCanvas.width / 2;
+		displacementX = (x1 - oneSideWidth) / (oneSideWidth);
+
+		var oneSideHeight = myCanvas.height / 2;
+		displacementY = (y1 - oneSideHeight) / (oneSideHeight);
 
 		calculateCirclePoints(gl, program);
 	}
